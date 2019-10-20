@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION=0.1
+VERSION=0.2
 
 ## bm, bibliography manager for LaTeX
 ## Copyright (C) 2019 Cem Keylan <cem@ckyln.com>
