@@ -11,6 +11,7 @@ Current Features
   * Search through crossref
   * Add entries to $BIB file through DOI or a pdf file
   * Quickly Edit/View $BIB through your favourite pager/editor
+  * Open editor with a template bib file and pipe it into the master bib file
 
 
 Dependencies

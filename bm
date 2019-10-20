@@ -18,6 +18,7 @@ VERSION=0.1
 ##    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 error() { printf "Error: $1\\n" >&2 ; exit 1;}
+msgexit() { printf "$1\\n" ; exit;}
 
 usage() {
 	cat <<EOF
@@ -29,6 +30,7 @@ Usage: ${0##*/} <option> [parameter]
     getbib - Get bibliographic information from pdf or doi and add to bibliography file
     view   - View your bibliography with \$PAGER
     edit   - Edit your bibliography with \$EDITOR
+    entry  - Create a bibliography entry with \$EDITOR
     help   - Print this help
 
   Note:
@@ -84,6 +86,43 @@ search() {
 	done <$tmpfile
 }
 
+entry() {
+	tmpfile="$(mktemp)"
+	cat >$tmpfile <<EOF
+// vi:syntax=bib
+// Entry in bibtex format
+// Change @article to the format you are citing 
+// (e.g. @book, @misc)
+//
+// You can change name_year to your liking, it 
+// is there for reference
+//
+// Lines here will not be added to your bib file
+// Remove this line to cancel entry
+@article{name_year,
+	doi = {},
+	url = {},
+	year = ,
+	month = {},
+	publisher = {{}},
+	volume = {},
+	number = {},
+	pages = {},
+	author = {},
+	title = {},
+	journal = {}
+}
+
+EOF
+	$EDITOR $tmpfile
+	grep "Remove this line to cancel entry" $tmpfile >/dev/null 2>&1 || msgexit "Entry canceled"
+	rmline="$(grep -nr "Remove this line to cancel entry" $tmpfile | cut -d : -f 1)"
+	full="$(cat $tmpfile | wc -l)"
+	rmdone="$(expr $full - $rmline)"
+	tail -n $rmdone $tmpfile >> $BIB
+
+}
+
 
 getversion() {
 	printf "${0##*/}-$VERSION\n" && exit
@@ -98,5 +137,6 @@ case $1 in
 	edit) "$EDITOR" "$BIB" ;;
 	view) "$PAGER" "$BIB" ;;
 	version) getversion ;;
+	entry) entry ;;
 	*) usage ;;
 esac
