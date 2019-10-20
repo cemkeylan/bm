@@ -76,7 +76,8 @@ EOF
 search() {
 	jq --version >/dev/null 2>&1 || error "You must install jq for search functionality"
 	QUERY="$(echo $1 | sed 's/ /%20/g')"
-	tmpfile=$(mktemp)
+	mkdir -p /tmp/bm/
+	tmpfile=$(mktemp /tmp/bm/search-XXXXXXXX)
 	curl -A "$agent" -s https://api.crossref.org/works\?query\="$QUERY" | jq ".message.items[] | select(.author | length >=1) | select(.title | length >=1) | select(.DOI | length >=1) | [.DOI, .author[].given, .author[].family, .title[]] | @csv" > $tmpfile
 	while IFS=, read -r doi authorfirst authorlast title; do
 		printf "DOI: $doi\nTitle: $title\nFirst Name: $authorfirst\nLast Name: $authorlast\n\n"
