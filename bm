@@ -1,0 +1,101 @@
+#!/bin/sh
+VERSION=0.1
+
+## bm, bibliography manager for LaTeX
+## Copyright (C) 2019 Cem Keylan <cem@ckyln.com>
+
+##    This program is free software: you can redistribute it and/or modify
+##    it under the terms of the GNU General Public License as published by
+##    the Free Software Foundation, either version 3 of the License, or
+##    (at your option) any later version.
+##
+##    This program is distributed in the hope that it will be useful,
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##    GNU General Public License for more details.
+##
+##    You should have received a copy of the GNU General Public License
+##    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+error() { printf "Error: $1\\n" >&2 ; exit 1;}
+
+usage() {
+	cat <<EOF
+Usage: ${0##*/} <option> [parameter]
+
+  Options:
+    
+    search - Search crossref for bibliographic information
+    getbib - Get bibliographic information from pdf or doi and add to bibliography file
+    view   - View your bibliography with \$PAGER
+    edit   - Edit your bibliography with \$EDITOR
+    help   - Print this help
+
+  Note:
+    You must have exported a \$BIB variable where BIB is your bibliography file
+
+EOF
+exit
+}
+
+checkbib() {
+	[ -z "$BIB" ] && cat <<EOF && exit
+${0##*/}: You don't have a \$BIB variable configured.
+To add a \$BIB variable add
+
+  export BIB=/path/to/bib/file.bib
+
+to your shell rc or your profile file
+EOF
+}
+
+
+getbib() {
+	if [ -z "$1" ]; then
+		cat <<EOF
+Usage: ${0##*/} getbib <pdf filename or DOI> [optional: explanation]
+
+EOF
+		exit
+	fi
+	if [ -f "$1" ]; then
+		doi=$(pdfinfo "$1" | grep -io "doi:.*") ||
+		doi=$(pdftotext "$1" 2>/dev/null - | grep -io "doi:.*" -m 1) ||
+		exit 1
+	else
+		doi="$1"
+	fi
+	err="Resource not found."
+	get="$(curl -A "$agent" -s "https://api.crossref.org/works/$doi/transform/application/x-bibtex" -w "\\n")"
+	[ "$get" = "$err" ] && error "$err"
+	[ -n "$2" ] && printf "// $2\n" >> "$BIB"
+	printf "$get\n" >> "$BIB"
+}
+
+
+search() {
+	jq --version >/dev/null 2>&1 || error "You must install jq for search functionality"
+	QUERY="$(echo $1 | sed 's/ /%20/g')"
+	tmpfile=$(mktemp)
+	curl -A "$agent" -s https://api.crossref.org/works\?query\="$QUERY" | jq ".message.items[] | select(.author | length >=1) | select(.title | length >=1) | select(.DOI | length >=1) | [.DOI, .author[].given, .author[].family, .title[]] | @csv" > $tmpfile
+	while IFS=, read -r doi authorfirst authorlast title; do
+		printf "DOI: $doi\nTitle: $title\nFirst Name: $authorfirst\nLast Name: $authorlast\n\n"
+	done <$tmpfile | $PAGER
+}
+
+
+getversion() {
+	printf "${0##*/}-$VERSION\n" && exit
+}
+
+[ -z "$1" ] && usage 
+checkbib
+agent="bm/$VERSION (https://git.ckyln.com/bm; mailto: cem@ckyln.com)"
+case $1 in
+	getbib) getbib "$2" "$3" ;;
+	search) search "$2" ;;
+	edit) "$EDITOR" "$BIB" ;;
+	view) "$PAGER" "$BIB" ;;
+	version) getversion ;;
+	*) usage ;;
+esac
