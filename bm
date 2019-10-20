@@ -69,7 +69,7 @@ EOF
 	get="$(curl -A "$agent" -s "https://api.crossref.org/works/$doi/transform/application/x-bibtex" -w "\\n")"
 	[ "$get" = "$err" ] && error "$err"
 	[ -n "$2" ] && printf "// $2\n" >> "$BIB"
-	printf "$get\n" >> "$BIB"
+	printf "$get\n\n" >> "$BIB"
 }
 
 
