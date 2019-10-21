@@ -1,5 +1,9 @@
 PREFIX = /usr/local
 
+options:
+	@echo buid options for bm
+	@echo PREFIX = ${PREFIX}
+
 install:
 	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
@@ -10,5 +14,5 @@ uninstall:
 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/bm
 
-.PHONY: install uninstall
+.PHONY: options install uninstall
 	
