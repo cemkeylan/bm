@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION=0.2
+V=VERSION
 
 ## bm, bibliography manager for LaTeX
 ## Copyright (C) 2019 Cem Keylan <cem@ckyln.com>
@@ -125,12 +125,12 @@ EOF
 
 
 getversion() {
-	printf "${0##*/}-$VERSION\n" && exit
+	printf "${0##*/}-$V\n" && exit
 }
 
 [ -z "$1" ] && usage 
 checkbib
-agent="bm/$VERSION (https://git.ckyln.com/bm; mailto: cem@ckyln.com)"
+agent="bm/$V (https://git.ckyln.com/bm; mailto: cem@ckyln.com)"
 case $1 in
 	getbib) getbib "$2" "$3" ;;
 	search) search "$2" ;;
