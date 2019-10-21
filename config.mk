@@ -1,0 +1,6 @@
+# VERSION NUMBER
+VERSION = 0.2
+
+# PATH
+PREFIX = /usr/local
+MANPREFIX = ${PREFIX}/share/man
