@@ -26,12 +26,13 @@ Usage: ${0##*/} <option> [parameter]
 
   Options:
     
-    search - Search crossref for bibliographic information
-    getbib - Get bibliographic information from pdf or doi and add to bibliography file
-    view   - View your bibliography with \$PAGER
-    edit   - Edit your bibliography with \$EDITOR
-    entry  - Create a bibliography entry with \$EDITOR
-    help   - Print this help
+    search  - Search crossref for bibliographic information
+    getbib  - Get bibliographic information from pdf or doi and add to bibliography file
+    view    - View your bibliography with \$PAGER
+    edit    - Edit your bibliography with \$EDITOR
+    entry   - Create a bibliography entry with \$EDITOR
+    version - Prints version and exits
+    help    - Print this help
 
   Note:
     You must have exported a \$BIB variable where BIB is your bibliography file
