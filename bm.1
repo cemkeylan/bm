@@ -1,0 +1,56 @@
+.TH BM 1 bm\-VERSION
+.SH NAME
+bm \- bibliography manager for biblatex
+.SH SYNOPSIS
+.B bm
+<option> [parameter]
+.SH DESCRIPTION
+.B bm
+is a shell script for managing a bibliography file. It has features \
+for searching crossref api, getting crossref entry from DOI and adding \
+to the bibliography, and more.
+.SH OPTIONS
+.TP
+.B search
+<"search query">
+.TP
+Search option runs the query against the api and lists the formatted \
+list to the standard output, which you can pipe into another program, \
+like a pager or an editor.
+.TP
+.B getbib
+<DOI or .pdf file> [Explanation]
+.TP
+If a pdf file is given, it runs pdfinfo to find the DOI. If pdfinfo \
+fails to find DOI metadata, it runs pdftotext to find any DOI information. \
+It exits if both fails. If DOI is found from the pdf file \
+or the given parameter was a DOI, it runs a query of the DOI to \
+the crossref database to get bibtex entry.
+.TP
+You can also add an Explanation after the first parameter (with quotes) \
+to add a comment above the bibliography entry.
+.TP
+.B view
+.TP
+View your bibliography with your $PAGER, usually with less.
+.TP
+.B edit
+.TP
+Edit your bibliography with $EDITOR.
+.TP
+.B entry
+.TP
+Creates a temporary entry template file and opens it with an editor. It \
+adds the entry to your bibliography unless you cancel it. This is good \
+for not messing up with the main bibliography file.
+.TP
+.B help
+.TP
+Prints usage information to the standard output.
+.TP
+.B version
+.TP
+Prints version number and exits
+.SH AUTHOR
+Cem Keylan <cem@ckyln.com>
+
