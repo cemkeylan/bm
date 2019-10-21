@@ -116,7 +116,7 @@ entry() {
 }
 
 EOF
-	$EDITOR $tmpfile
+	${EDITOR-nano} $tmpfile
 	grep "Remove this line to cancel entry" $tmpfile >/dev/null 2>&1 || msgexit "Entry canceled"
 	rmline="$(grep -nr "Remove this line to cancel entry" $tmpfile | cut -d : -f 1)"
 	full="$(cat $tmpfile | wc -l)"
@@ -136,8 +136,8 @@ agent="bm/$V (https://git.ckyln.com/bm; mailto: cem@ckyln.com)"
 case $1 in
 	getbib) getbib "$2" "$3" ;;
 	search) search "$2" ;;
-	edit) "$EDITOR" "$BIB" ;;
-	view) "$PAGER" "$BIB" ;;
+	edit) "${EDITOR-nano}" "$BIB" ;;
+	view) "${PAGER-less}" "$BIB" ;;
 	version) getversion ;;
 	entry) entry ;;
 	*) usage ;;
