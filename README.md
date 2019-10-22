@@ -16,7 +16,37 @@ Current Features
 
 Dependencies
 ------------
-  * jq - for search functionality
-  * pdfinfo - for looking DOI metada from pdf file
-  * pdftotext - for looking DOI metadata from the text of pdf file
 
+  * jq - for search functionality
+  * poppler - for getting DOI metadata from a pdf
+
+
+Installation
+------------
+
+Installation is pretty simple
+
+  ```
+  git clone git://git.ckyln.com/bm.git
+  cd bm.git
+  sudo make install
+  ```
+
+
+Installation on Arch
+--------------------
+
+bm is also in the Arch User Repository (AUR) with the same name.
+It can be installed with
+
+  ```
+  git clone https://aur.archlinux.org/bm
+  cd bm
+  makepkg -si
+  ```
+
+or with yay
+
+  ```
+  yay -S bm
+  ```
