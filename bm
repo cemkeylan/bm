@@ -55,13 +55,7 @@ EOF
 
 
 getbib() {
-	if [ -z "$1" ]; then
-		cat <<EOF
-Usage: ${0##*/} getbib <pdf filename or DOI> [optional: explanation]
-
-EOF
-		exit
-	fi
+	[ -z "$1" ] && printf "Usage: ${0##*/} getbib <pdf filename or DOI> [optional: explanation]\\n\\n" && exit
 	if [ -f "$1" ]; then
 		doi=$(pdfinfo "$1" | grep -io "doi:.*") ||
 		doi=$(pdftotext "$1" 2>/dev/null - | grep -io "doi:.*" -m 1) ||
