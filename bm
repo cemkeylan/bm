@@ -78,6 +78,7 @@ EOF
 
 
 search() {
+	[ -z "$1" ] && printf "Usage: ${0##*/} search <search query>\\n\\n" && exit
 	jq --version >/dev/null 2>&1 || error "You must install jq for search functionality"
 	QUERY="$(echo $1 | sed 's/ /%20/g')"
 	mkdir -p /tmp/bm/
