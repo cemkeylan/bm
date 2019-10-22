@@ -28,7 +28,7 @@ Installation is pretty simple
 
   ```
   git clone git://git.ckyln.com/bm.git
-  cd bm.git
+  cd bm
   sudo make install
   ```
 
