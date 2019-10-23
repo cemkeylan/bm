@@ -21,6 +21,8 @@ error() { printf "Error: $1\\n" >&2 ; exit 1;}
 msgexit() { printf "$1\\n" ; exit;}
 
 usage() {
+	exitcode=$1
+	[ -z $1 ] && exitcode="0"
 	cat <<EOF
 Usage: ${0##*/} <option> [parameter]
 
@@ -39,7 +41,7 @@ Usage: ${0##*/} <option> [parameter]
     You must have exported a \$BIB variable where BIB is your bibliography file
 
 EOF
-exit
+exit $exitcode
 }
 
 checkbib() {
@@ -136,5 +138,5 @@ case $1 in
 	version) getversion ;;
 	entry) entry ;;
 	help) usage;;
-	*) printf "${0##*/} -- Unknown option: $1\n\n"; usage ;;
+	*) printf "${0##*/} -- Unknown option: $1\n\n"; usage 1 ;;
 esac
