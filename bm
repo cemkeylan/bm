@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 V=VERSION
 
 ## bm, bibliography manager for LaTeX
