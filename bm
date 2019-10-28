@@ -86,6 +86,8 @@ search() {
 }
 
 entry() {
+	[ "$1" = "help" ] && printf "Usage: ${0##*/} entry \"placeholder\"\\n\\n" && exit
+	[ -n "$1" ] && ph="$1"
 	tmpfile="$(mktemp)"
 	cat >$tmpfile <<EOF
 // vi:syntax=bib
@@ -98,18 +100,18 @@ entry() {
 //
 // Lines here will not be added to your bib file
 // Remove this line to cancel entry
-@article{name_year,
-	doi = {},
-	url = {},
-	year = ,
-	month = {},
-	publisher = {{}},
-	volume = {},
-	number = {},
-	pages = {},
-	author = {},
-	title = {},
-	journal = {}
+@article{$ph,
+	doi = {$ph},
+	url = {$ph},
+	year = $ph,
+	month = {$ph},
+	publisher = {{$ph}},
+	volume = {$ph},
+	number = {$ph},
+	pages = {$ph},
+	author = {$ph},
+	title = {$ph},
+	journal = {$ph}
 }
 
 EOF
@@ -136,7 +138,7 @@ case $1 in
 	edit) "${EDITOR-nano}" "$BIB" ;;
 	view) "${PAGER-less}" "$BIB" ;;
 	version) getversion ;;
-	entry) entry ;;
+	entry) entry "$2" ;;
 	help) usage;;
 	*) printf "${0##*/} -- Unknown option: $1\n\n"; usage 1 ;;
 esac
