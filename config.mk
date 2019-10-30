@@ -1,5 +1,5 @@
 # VERSION NUMBER
-VERSION = 0.3
+VERSION = 0.4
 
 # PATH
 PREFIX = /usr/local
